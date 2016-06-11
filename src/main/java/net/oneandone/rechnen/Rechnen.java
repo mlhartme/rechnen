@@ -1,4 +1,4 @@
-package rafer;
+package net.oneandone.rechnen;
 
 import net.oneandone.sushi.cli.Console;
 import net.oneandone.sushi.fs.World;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Jakob {
+public class Rechnen {
     public static final String ANSI_ERASE_END = "\u001B[0J";
     public static final String ANSI_ERASE_ALL = "\u001B[2J";
     public static final String ANSI_DOWN = "\u001B[1B";
