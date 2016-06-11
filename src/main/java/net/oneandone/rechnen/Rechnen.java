@@ -24,24 +24,13 @@ public class Rechnen {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
-    public static class Aufgabe {
-        public final int x;
-        public final int y;
-
-        public Aufgabe(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
     public static void main(String[] args) {
         Console console;
         Random random;
-        String str;
-        int ergebnis;
+        String ergebnis;
         List<Aufgabe> alles;
         Aufgabe aufgabe;
         int i;
-        int count;
         int richtig;
         StringBuilder done;
         List<String> history;
@@ -51,10 +40,9 @@ public class Rechnen {
         history = new ArrayList<>();
         done = new StringBuilder();
         console = Console.create(new World());
-        alles = ausdenken();
+        alles = kleinesEinMalEins();
         console.info.println(ANSI_ERASE_ALL + ANSI_HOME + "Hallo Jakob, laß uns rechnen!");
         random = new Random();
-        count = alles.size();
         richtig = 0;
         start = System.currentTimeMillis();
         while (true) {
@@ -67,20 +55,15 @@ public class Rechnen {
             }
             i = Math.abs(random.nextInt()) % alles.size();
             aufgabe = alles.get(i);
-            str = console.readline(aufgabe.x + " * " + aufgabe.y + " = ").trim();
-            try {
-                ergebnis = Integer.parseInt(str);
-            } catch (NumberFormatException e) {
-                ergebnis = 0;
-            }
-            if (ergebnis == aufgabe.x * aufgabe.y) {
+            ergebnis = console.readline(aufgabe.frage).trim();
+            if (ergebnis.equals(aufgabe.frage)) {
                 alles.remove(i);
                 richtig++;
                 done.append(ANSI_GREEN + "+" + ANSI_RESET);
-                history.add(aufgabe.x + " * " + aufgabe.y + " = " + ANSI_GREEN + ergebnis + ANSI_RESET);
+                history.add(aufgabe.frage + ANSI_GREEN + ergebnis + ANSI_RESET);
             } else {
                 done.append(ANSI_RED + "-" + ANSI_RESET);
-                history.add(aufgabe.x + " * " + aufgabe.y + " = " + ANSI_RED + str + ANSI_RESET);
+                history.add(aufgabe.frage + ANSI_RED + ergebnis + ANSI_RESET);
             }
             if (history.size() > 15) {
                 history.remove(0);
@@ -96,13 +79,13 @@ public class Rechnen {
         return Strings.times('_', count);
     }
 
-    private static List<Aufgabe> ausdenken() {
+    private static List<Aufgabe> kleinesEinMalEins() {
         List<Aufgabe> result;
 
         result = new ArrayList<>();
         for (int x = 2; x <= 9; x++) {
             for (int y = x + 1; y <= 9; y++) {
-                result.add(new Aufgabe(x, y));
+                result.add(new Aufgabe(x + " * " + y + " = ", Integer.toString(x*y)));
             }
         }
         return result;

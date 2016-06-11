@@ -56,7 +56,7 @@
         <version>1.6.0</version>
         <configuration>
           <name>pommes</name>
-          <main>net.oneandone.rechnen.Main</main>
+          <main>net.oneandone.rechnen.Rechnen</main>
         </configuration>
         <executions>
           <execution>
