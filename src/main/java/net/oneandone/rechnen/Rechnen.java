@@ -25,27 +25,55 @@ public class Rechnen {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     public static void main(String[] args) {
+        String wahl;
+        String name;
         Console console;
+
+        console = Console.create(new World());
+        name = console.readline("Hallo, wie ist dein Name? ");
+        while (true) {
+            console.info.println(ANSI_ERASE_ALL + ANSI_HOME + "Hallo " + name + ", laß uns rechnen!");
+            console.info.println();
+            console.info.println("7er und 8er    -> 1");
+            console.info.println("alles          -> 2");
+            console.info.println("nichts mehr    -> 0");
+            console.info.println();
+
+            wahl = console.readline("Was möchtest du üben? ");
+            switch (wahl) {
+                case "0":
+                    return;
+                case "1":
+                    rechnen(console, Aufgabe.siebenUndAcht());
+                    break;
+                case "2":
+                    rechnen(console, Aufgabe.kleinesEinMalEins());
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private static void rechnen(Console console, List<Aufgabe> alles) {
         Random random;
         String ergebnis;
-        List<Aufgabe> alles;
         Aufgabe aufgabe;
         int i;
         int richtig;
         StringBuilder done;
         List<String> history;
         long start;
-        int end = 20;
+        int end;
 
         history = new ArrayList<>();
         done = new StringBuilder();
-        console = Console.create(new World());
-        alles = kleinesEinMalEins();
-        console.info.println(ANSI_ERASE_ALL + ANSI_HOME + "Hallo Jakob, laß uns rechnen!");
         random = new Random();
         richtig = 0;
         start = System.currentTimeMillis();
+        end = Math.min(20, alles.size());
         while (true) {
+            console.info.print(ANSI_HOME + ANSI_DOWN + ANSI_ERASE_END);
             console.info.println(done + dots(end - richtig));
             for (String h : history) {
                 console.info.println(h);
@@ -56,7 +84,7 @@ public class Rechnen {
             i = Math.abs(random.nextInt()) % alles.size();
             aufgabe = alles.get(i);
             ergebnis = console.readline(aufgabe.frage).trim();
-            if (ergebnis.equals(aufgabe.frage)) {
+            if (ergebnis.equals(aufgabe.antwort)) {
                 alles.remove(i);
                 richtig++;
                 done.append(ANSI_GREEN + "+" + ANSI_RESET);
@@ -68,26 +96,17 @@ public class Rechnen {
             if (history.size() > 15) {
                 history.remove(0);
             }
-            console.info.print(ANSI_HOME + ANSI_DOWN + ANSI_ERASE_END);
         }
         console.info.println();
         console.info.println("Du hast " + richtig + " richtige Aufgaben in "
                 + ((System.currentTimeMillis() - start) / 1000) + " Sekunden gerechnet :)");
-    }
 
+        console.info.println();
+        console.readline("Bitte drücke Return: ");
+
+    }
     private static String dots(int count) {
         return Strings.times('_', count);
     }
 
-    private static List<Aufgabe> kleinesEinMalEins() {
-        List<Aufgabe> result;
-
-        result = new ArrayList<>();
-        for (int x = 2; x <= 9; x++) {
-            for (int y = x + 1; y <= 9; y++) {
-                result.add(new Aufgabe(x + " * " + y + " = ", Integer.toString(x*y)));
-            }
-        }
-        return result;
-    }
 }

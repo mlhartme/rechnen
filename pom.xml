@@ -55,7 +55,7 @@
         <artifactId>application</artifactId>
         <version>1.6.0</version>
         <configuration>
-          <name>pommes</name>
+          <name>rechnen</name>
           <main>net.oneandone.rechnen.Rechnen</main>
         </configuration>
         <executions>
